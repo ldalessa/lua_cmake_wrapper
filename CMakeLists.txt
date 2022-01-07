@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.14)
 
 project(lua_cmake_wrapper VERSION 5.4.3 LANGUAGES C)
 
