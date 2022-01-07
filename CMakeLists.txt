@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.14)
 
 project(lua_cmake_wrapper VERSION 5.4.3 LANGUAGES C)
 
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
 # grab the lua project, version 5.4.3
 include (FetchContent)
 FetchContent_Declare(lua_base
@@ -47,7 +50,7 @@ add_library(lua_lib STATIC
   $<BUILD_INTERFACE:${lua_base_SRCDIR}>/linit.c)
 
 target_include_directories(lua_lib PUBLIC $<BUILD_INTERFACE:${lua_SRCDIR}>)
-target_compile_features(lua_lib PUBLIC c_std_99)
+#target_compile_features(lua_lib PUBLIC c_std_99)
 target_link_libraries(lua_lib m dl)
 add_library(lua_cmake_wrapper::lua ALIAS lua_lib)
 
