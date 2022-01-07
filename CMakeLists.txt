@@ -47,7 +47,7 @@ add_library(lua STATIC
   $<BUILD_INTERFACE:${lua_SRCDIR}>/linit.c)
 
 target_include_directories(lua PUBLIC $<BUILD_INTERFACE:${lua_SRCDIR}>)
-target_compile_features(lua INTERFACE c_std_99)
+target_compile_features(lua PUBLIC c_std_99)
 target_link_libraries(lua m dl)
 
 if (APPLE)
