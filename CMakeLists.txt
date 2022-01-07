@@ -4,58 +4,59 @@ project(lua_cmake_wrapper VERSION 5.4.3 LANGUAGES C)
 
 # grab the lua project, version 5.4.3
 include (FetchContent)
-FetchContent_Declare(lua
+FetchContent_Declare(lua_base
   GIT_REPOSITORY     https://github.com/lua/lua.git
   GIT_TAG            v5.4.3)
-FetchContent_MakeAvailable(lua)
-FetchContent_GetProperties(lua SOURCE_DIR lua_SRCDIR)
+FetchContent_MakeAvailable(lua_base)
+FetchContent_GetProperties(lua_base SOURCE_DIR lua_base_SRCDIR)
 
 # create a cmake target library for the fetched project
-add_library(lua STATIC
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lapi.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lcode.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lctype.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/ldebug.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/ldo.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/ldump.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lfunc.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lgc.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/llex.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lmem.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lobject.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lopcodes.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lparser.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lstate.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lstring.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/ltable.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/ltm.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lundump.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lvm.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lzio.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/ltests.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lauxlib.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lbaselib.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/ldblib.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/liolib.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lmathlib.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/loslib.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/ltablib.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lstrlib.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lutf8lib.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/loadlib.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/lcorolib.c
-  $<BUILD_INTERFACE:${lua_SRCDIR}>/linit.c)
+add_library(lua_lib STATIC
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lapi.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lcode.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lctype.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/ldebug.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/ldo.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/ldump.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lfunc.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lgc.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/llex.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lmem.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lobject.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lopcodes.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lparser.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lstate.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lstring.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/ltable.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/ltm.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lundump.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lvm.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lzio.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/ltests.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lauxlib.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lbaselib.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/ldblib.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/liolib.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lmathlib.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/loslib.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/ltablib.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lstrlib.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lutf8lib.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/loadlib.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/lcorolib.c
+  $<BUILD_INTERFACE:${lua_base_SRCDIR}>/linit.c)
 
-target_include_directories(lua PUBLIC $<BUILD_INTERFACE:${lua_SRCDIR}>)
-target_compile_features(lua PUBLIC c_std_99)
-target_link_libraries(lua m dl)
+target_include_directories(lua_lib PUBLIC $<BUILD_INTERFACE:${lua_SRCDIR}>)
+target_compile_features(lua_lib PUBLIC c_std_99)
+target_link_libraries(lua_lib m dl)
+add_library(lua_cmake_wrapper::lua ALIAS lua_lib)
 
 if (APPLE)
-  target_compile_definitions(lua PUBLIC LUA_USE_MACOSX)
+  target_compile_definitions(lua_lib PUBLIC LUA_USE_MACOSX)
 endif (APPLE)
 
 if (UNIX)
-  target_compile_definitions(lua PUBLIC LUA_USE_LINUX LUA_USE_READLINE)
+  target_compile_definitions(lua_lib PUBLIC LUA_USE_LINUX LUA_USE_READLINE)
   
   include(FindPkgConfig)
 
@@ -69,5 +70,5 @@ if (UNIX)
     add_library(PkgConfig::readline ALIAS readline)
   endif (NOT readline_FOUND)
 
-  target_link_libraries(lua PkgConfig::readline)
+  target_link_libraries(lua_lib PkgConfig::readline)
 endif (UNIX)
