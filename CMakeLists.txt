@@ -50,7 +50,8 @@ add_library(lua_lib STATIC
   $<BUILD_INTERFACE:${lua_base_SRCDIR}>/linit.c)
 
 target_include_directories(lua_lib PUBLIC $<BUILD_INTERFACE:${lua_base_SRCDIR}>)
-target_link_libraries(lua_lib m dl)
+target_compile_options(lua_lib PUBLIC -fno-common)
+target_link_libraries(lua_lib PUBLIC m dl)
 add_library(lua_cmake_wrapper::lua ALIAS lua_lib)
 
 if (APPLE)
@@ -72,5 +73,5 @@ if (UNIX)
     add_library(PkgConfig::readline ALIAS readline)
   endif (NOT readline_FOUND)
 
-  target_link_libraries(lua_lib PkgConfig::readline)
+  target_link_libraries(lua_lib PUBLIC PkgConfig::readline)
 endif (UNIX)
